@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>TOP PAGE</title>
+</head>
+<body style="text-align:center">
+    <div id="loc">
+        <button class="button" onclick="getPosition();">GPS情報の更新 ※一回だけ押してください</button>
+        <script>
+            // 現在地取得処理
+            function getPosition() {
+              // 現在地を取得
+              navigator.geolocation.getCurrentPosition(
+                // 取得成功した場合
+                function(position) {
+                    let loc = document.getElementById('loc');
+                    let loc_url = document.getElementById('loc_url');
+	            	let lat = position.coords.latitude;
+	            	let lon = position.coords.longitude;
+            		loc.insertAdjacentHTML('afterend', "緯度："+lat+" 経度："+lon);
+            		loc_url.insertAdjacentHTML('afterend', "");
+            		var target = document.getElementById("url")
+		            target.href = "https://weathernews.jp/onebox/"+lat+"/"+lon+"/"
+                },
+                // 取得失敗した場合
+                function(error) {
+                  switch(error.code) {
+                    case 1: //PERMISSION_DENIED
+                      alert("位置情報の利用が許可されていません");
+                      break;
+                    case 2: //POSITION_UNAVAILABLE
+                      alert("現在位置が取得できませんでした");
+                      break;
+                    case 3: //TIMEOUT
+                      alert("タイムアウトになりました");
+                      break;
+                    default:
+                      alert("その他のエラー(エラーコード:"+error.code+")");
+                      break;
+                  }
+                }
+              );
+            }
+        </script>
+    </div>
+        <br>
+            <p class="loc" id="loc"></p>
+        <br>
+          <button class="button">
+            <a id="url" href="">
+            <div id="loc_url">天気予報のページ(ウェザーニュース)</div>
+          </a></button>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</body>
+</html>
